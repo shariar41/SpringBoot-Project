@@ -48,10 +48,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.Dtos.RegisterUserDto;
-import com.models.Role;
 import com.models.RoleEnum;
 import com.models.User;
-import com.repositories.RoleRepository;
 import com.repositories.UserRepository;
 
 import java.util.ArrayList;
@@ -62,9 +60,6 @@ import java.util.Set;
 
 @Service
 public class UserService {
-	@Autowired
-	private RoleRepository roleRepository;
-	
 	@Autowired
     private UserRepository userRepository;
     
@@ -78,6 +73,15 @@ public class UserService {
 
         return users;
     }
+    public Optional<User> getUserById(Long id) {
+        Optional<User> userOptional = userRepository.findById(id);
+        if (userOptional.isPresent()) {
+            return userOptional;
+        } else {
+            throw new IllegalArgumentException("User not found with id: " + id);
+        }
+    }
+    
     public User createAdministrator(RegisterUserDto input) {
 //        Optional<Role> optionalRole = roleRepository.findByName(RoleEnum.ADMIN);
         Set<RoleEnum> roles = new HashSet<>();
